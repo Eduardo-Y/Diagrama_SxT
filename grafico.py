@@ -97,8 +97,8 @@ def diagrama_SxT(tempo, *corpos):
     plt.legend(loc='best')
     plt.show()
 
+if __name__ == '__main__':
+    aviao_1 = Corpo(100, 79, name='Avião')
+    aviao_2 = Corpo(50, 20, name='Avião')
 
-aviao_1 = Corpo(100, 79, name='Avião')
-aviao_2 = Corpo(50, 20, name='Avião')
-
-diagrama_SxT(8, aviao_1, aviao_2)
+    diagrama_SxT(8, aviao_1, aviao_2)
