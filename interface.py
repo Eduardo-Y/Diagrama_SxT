@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from grafico import Corpo, diagrama_SxT
 
 def item_row(item_num):
     row =  [sg.pin(sg.Col([[sg.B("X", border_width=0, button_color=(sg.theme_background_color()), k=('-DEL-', item_num), tooltip='Deletar Objeto'),
@@ -32,6 +33,7 @@ def main():
         print(event, values)
         if event == sg.WIN_CLOSED or event == 'Exit':
             break
+        
         if event == 'Add Item':
             window.metadata += 1
             window.extend_layout(window['-SECTION-'], [item_row(window.metadata)])
@@ -41,8 +43,11 @@ def main():
             sg.popup_scrolled(__file__, sg.get_versions(), location=window.current_location(), keep_on_top=True, non_blocking=True)
         elif event[0] == '-DEL-':
             window[('-ROW-', event[1])].update(visible=False)
-        for i in '-SECTION-':
-            print()
+        elif event == 'Refresh':
+            lista = [Corpo(float(values[('-Veloc-', i)]), float(values[('-Pos-', i)]), name=values['-Name-']) for i in range(0, (window.metadata + 1))]
+            tempo = float(values['-Time-'])
+            diagrama_SxT(tempo, tuple(lista))
+
     window.close()
 
 

@@ -36,7 +36,7 @@ class Corpo():
         else:
             return (posicao,resultado)
 
-def diagrama_SxT(tempo, *corpos):
+def diagrama_SxT(tempo, corpos):
     # tempo = float(input('digite o Tempo valor:'))
     lista_de_corpos = []
     enumeracao = []
@@ -95,10 +95,11 @@ def diagrama_SxT(tempo, *corpos):
     plt.ylabel('Posição (So)')
     plt.xlabel('Posição (t)')
     plt.legend(loc='best')
+    plt.savefig('grafico')
     plt.show()
 
 if __name__ == '__main__':
     aviao_1 = Corpo(100, 79, name='Avião')
     aviao_2 = Corpo(50, 20, name='Avião')
 
-    diagrama_SxT(8, aviao_1, aviao_2)
+    diagrama_SxT(8, (aviao_1, aviao_2))
