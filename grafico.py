@@ -6,10 +6,16 @@ class Corpo():
         self.velocidade = velocidade
         self.Ponto_inicial = Ponto_inicial
         self.name = name
+
+
     def veloc(self):
         return self.velocidade
+    
+
     def P0(self):
         return self.Ponto_inicial
+    
+
     def __str__(self):
         return self.name
     
