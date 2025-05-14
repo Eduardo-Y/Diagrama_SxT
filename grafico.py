@@ -43,6 +43,7 @@ class Corpo():
             return (posicao,resultado)
 
 def diagrama_SxT(tempo, corpos):
+    plt.close()
     # tempo = float(input('digite o Tempo valor:'))
     lista_de_corpos = []
     enumeracao = []
@@ -101,7 +102,6 @@ def diagrama_SxT(tempo, corpos):
     plt.ylabel('Posição (So)')
     plt.xlabel('Posição (t)')
     plt.legend(loc='best')
-    plt.savefig('grafico')
     plt.show()
 
 if __name__ == '__main__':

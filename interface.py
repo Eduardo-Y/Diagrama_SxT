@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from grafico import Corpo, diagrama_SxT
+import time as tm
 
 root = Tk()
 root.rowconfigure(0, weight=1)
@@ -33,18 +34,24 @@ def adicionar_objeto():
 
 def remover_objeto():
     try:
+        ttk.Label(frm, text=' ', background='black', foreground='white', anchor='center').grid(column=0, row=22,columnspan=4, sticky='NSEW', pady=10)
         objs[-1][0].destroy()
         objs[-1][1].destroy()
         objs[-1][2].destroy()
         objs[-1][3].destroy()
+        objs.pop()
 
     except AttributeError:
-        print('Não é possivel remover o primeiro Objeto.')
+        ttk.Label(frm, text='Não é possivel remover o primeiro Objeto.', background='black', foreground='white', anchor='center').grid(column=0, row=22,columnspan=4, sticky='NSEW', pady=10)
 
 
 def gerar_grafico(t):
-    corpos = [Corpo(float(obj[2].get()), float(obj[3].get())) for obj in objs]
-    diagrama_SxT(tempo=float(t), corpos=corpos)
+    try:
+        ttk.Label(frm, text="", background='black', foreground='white', anchor='center').grid(column=0, row=22, columnspan=4, sticky='NSEW', pady=10)
+        corpos = [Corpo(float(obj[2].get()), float(obj[3].get())) for obj in objs]
+        diagrama_SxT(tempo=float(t), corpos=corpos)
+    except ValueError:
+        ttk.Label(frm, text='Valor(es) invalido(s) ou vazio(s)!', background='black', foreground='white', anchor='center').grid(column=0, row=22, columnspan=4, sticky='NSEW', pady=10)
 
 width_input = 6
 
@@ -69,7 +76,7 @@ add_obj.grid(column=0, row=20, columnspan=2, pady=10)
 rmv_obj = ttk.Button(frm, text="Remover Objeto -", command=lambda: remover_objeto())
 rmv_obj.grid(column=2, row=20, columnspan=2, pady=10)
 
-ttk.Label(frm, text="Tempo", background='black', foreground='white').grid(column=0, row=21, sticky='NSEW', pady=10)
+ttk.Label(frm, text="Tempo:", background='black', foreground='white').grid(column=0, row=21, sticky='NSEW', pady=10)
 time = ttk.Entry(frm, width=width_input, justify='left')
 time.grid(column=1, row=21, pady=10, padx=10)
 
