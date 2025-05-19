@@ -42,6 +42,7 @@ class Corpo():
         else:
             return (posicao,resultado)
 
+
 def diagrama_SxT(tempo, corpos):
     plt.close()
     # tempo = float(input('digite o Tempo valor:'))
@@ -63,19 +64,8 @@ def diagrama_SxT(tempo, corpos):
         plt.plot([0, tempo],[So, posicao_final], c=cores[numero], marker='o', label=f'{numero+1}º {lista_de_corpos[numero].name}')
 
         plt.axhline(posicao_final, c='black', ls=':')
-
-        # if posicao_final > So:
-        #     diferenca = posicao_final - So
-        # elif So > posicao_final:
-        #     diferenca = So - posicao_final
-
-        # if diferenca < 0:
-        #     diferenca *= (-1)
-
-        # if lista_de_parametros[0] < diferenca:
-        #     lista_de_parametros[0] = diferenca
-
     
+
     tam = len(lista_de_corpos)
 
     for i in range(0, tam):
@@ -89,10 +79,6 @@ def diagrama_SxT(tempo, corpos):
             plt.axhline(PE[0], c='red', ls='-.')
             print(PE[1])
 
-
-    # define o tamanho do eixo X e Y
-    # pr = lista_de_parametros[0]
-    # plt.axis([-0.5, tempo*1.1, pr*-1.5, pr*1.5])
     
     # Personalização do gráfico (título, X do ponto 0, grade, legenda dos eixos)
     plt.title('Diagrama SxT')
