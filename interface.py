@@ -43,6 +43,8 @@ def remover_objeto():
     except AttributeError:
         ttk.Label(frm, text='Não é possivel remover o primeiro Objeto.', background='black', foreground='white', anchor='center').grid(column=0, row=22,columnspan=4, sticky='NSEW', pady=10)
 
+style = ttk.Style()
+style.configure('TFrame', background='black')
 
 def gerar_grafico(t):
     try:
