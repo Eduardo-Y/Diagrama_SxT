@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 from grafico import Corpo, diagrama_SxT
-import time as tm
 
 root = Tk()
 root.rowconfigure(0, weight=1)
