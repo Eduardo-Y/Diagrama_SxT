@@ -1,50 +1,85 @@
-import PySimpleGUI as sg
+from tkinter import *
+from tkinter import ttk
+from grafico import Corpo, diagrama_SxT
 
-def item_row(item_num):
-    row =  [sg.pin(sg.Col([[sg.B("X", border_width=0, button_color=(sg.theme_background_color()), k=('-DEL-', item_num), tooltip='Deletar Objeto'),
-                            sg.T('Velocidade'), sg.In(size=(4), k=('-Veloc-', item_num)),
-                            sg.T('Posição'),sg.In(size=(4), k=('-Pos-', item_num)),
-                            sg.T(f'{item_num + 1}º Objeto', k=('-STATUS-', item_num))]], k=('-ROW-', item_num)))]
-    return row
+root = Tk()
+root.rowconfigure(0, weight=1)
+root.columnconfigure(0, weight=1)
+root.configure(background='black')
 
+style = ttk.Style()
+style.configure('TFrame', background='black')
 
-def make_window():
+frm = ttk.Frame(root, padding=20)
+frm.grid()
 
-    layout = [  [sg.Text('Diagrama SxT', font='_ 15')],
-                [sg.Col([item_row(0)], k='-SECTION-')],
-                [sg.T('Tempo'), sg.In(size=(4), key=('-Time-')),sg.T('Nome dos Objetos'), sg.In(size=(4), key=('-Name-'))],
-                [sg.pin(sg.Text(size=(35,1), font='_ 8', k='-REFRESHED-',))],
-                [sg.T("X", enable_events=True, k='Exit', tooltip='Exit Application'), sg.T('Refresh', enable_events=True, k='Refresh',  tooltip='Save Changes & Refresh'), sg.T('+', enable_events=True, k='Add Item', tooltip='Adicionar Objeto')]
-             ]
+def printar_entradas():
+    for obj in objs:
+        print(f'| Velocidade: {obj[2].get()} | Posição Inicial: {obj[3].get()} |')
+    print()
 
-    right_click_menu = [[''], ['Add Item',  'Edit Me', 'Version']]
+def adicionar_objeto():
+    nova_label1 = ttk.Label(frm, text="Velocidade:", background='black', foreground='white')
+    nova_label1.grid(column=0, row=len(objs)+1, sticky='NSEW', pady=10)
+    nova_velocidade = ttk.Entry(frm, width=width_input)
+    nova_velocidade.grid(column=1, row=len(objs)+1, pady=10, padx=10)
 
-    window = sg.Window('Window Title', layout,  right_click_menu=right_click_menu, use_default_focus=False, font='_ 15', metadata=0, element_justification='c')
+    nova_label2 = ttk.Label(frm, text="Posição Inicial:", background='black', foreground='white')
+    nova_label2.grid(column=2, row=len(objs)+1, sticky='NSEW', pady=10)
+    nova_posicao = ttk.Entry(frm, width=width_input)
+    nova_posicao.grid(column=3, row=len(objs)+1, pady=10)
+    
+    objs.append((nova_label1, nova_label2, nova_velocidade, nova_posicao))
 
-    return window
+def remover_objeto():
+    try:
+        ttk.Label(frm, text=' ', background='black', foreground='white', anchor='center').grid(column=0, row=22,columnspan=4, sticky='NSEW', pady=10)
+        objs[-1][0].destroy()
+        objs[-1][1].destroy()
+        objs[-1][2].destroy()
+        objs[-1][3].destroy()
+        objs.pop()
 
-
-def main():
-
-    window = make_window()
-    while True:
-        event, values = window.read()     # wake every hour
-        print(event, values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
-            break
-        if event == 'Add Item':
-            window.metadata += 1
-            window.extend_layout(window['-SECTION-'], [item_row(window.metadata)])
-        elif event == 'Edit Me':
-            sg.execute_editor(__file__)
-        elif event == 'Version':
-            sg.popup_scrolled(__file__, sg.get_versions(), location=window.current_location(), keep_on_top=True, non_blocking=True)
-        elif event[0] == '-DEL-':
-            window[('-ROW-', event[1])].update(visible=False)
-        for i in '-SECTION-':
-            print()
-    window.close()
+    except AttributeError:
+        ttk.Label(frm, text='Não é possivel remover o primeiro Objeto.', background='black', foreground='white', anchor='center').grid(column=0, row=22,columnspan=4, sticky='NSEW', pady=10)
 
 
-if __name__ == '__main__':
-    main()
+def gerar_grafico(t):
+    try:
+        ttk.Label(frm, text="", background='black', foreground='white', anchor='center').grid(column=0, row=22, columnspan=4, sticky='NSEW', pady=10)
+        corpos = [Corpo(float(obj[2].get()), float(obj[3].get())) for obj in objs]
+        diagrama_SxT(tempo=float(t), corpos=corpos)
+    except ValueError:
+        ttk.Label(frm, text='Valor(es) invalido(s) ou vazio(s)!', background='black', foreground='white', anchor='center').grid(column=0, row=22, columnspan=4, sticky='NSEW', pady=10)
+
+width_input = 6
+
+root.title('Diagrama Sxt')
+orientacao = ttk.Label(frm, text="Determine as informações iniciais:", background='black', foreground='white', anchor='center')
+orientacao.grid(column=0, row=0, columnspan=4, sticky='NSEW', pady=20)
+orientacao.configure(font=("Arial", 12, "bold"))
+
+label1 = ttk.Label(frm, text="Velocidade:", background='black', foreground='white').grid(column=0, row=1, sticky='NSEW', pady=10)
+velocidade = ttk.Entry(frm, width=width_input)
+velocidade.grid(column=1, row=1, pady=10, padx=10)
+
+label2 = ttk.Label(frm, text="Posição Inicial:", background='black', foreground='white').grid(column=2, row=1, sticky='NSEW', pady=10)
+posicao_inicial = ttk.Entry(frm, width=width_input)
+posicao_inicial.grid(column=3, row=1, pady=10)
+
+objs = [(label1, label2, velocidade, posicao_inicial)]
+
+add_obj = ttk.Button(frm, text="Adicionar Objeto +", command=lambda: adicionar_objeto())
+add_obj.grid(column=0, row=20, columnspan=2, pady=10)
+
+rmv_obj = ttk.Button(frm, text="Remover Objeto -", command=lambda: remover_objeto())
+rmv_obj.grid(column=2, row=20, columnspan=2, pady=10)
+
+ttk.Label(frm, text="Tempo:", background='black', foreground='white').grid(column=0, row=21, sticky='NSEW', pady=10)
+time = ttk.Entry(frm, width=width_input, justify='left')
+time.grid(column=1, row=21, pady=10, padx=10)
+
+crr_graf = ttk.Button(frm, text="Gerar Gráfico", command=lambda: gerar_grafico(time.get()))
+crr_graf.grid(column=2, row=21, columnspan=4, pady=10)
+
+root.mainloop()
