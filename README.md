@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-
-# Projeto_Gr-fico
-
-# .
-
-> > > > > > > 45997f6 (Uploading my project to Github)
-
 # Simulação de Movimento com Interface Gráfica
 
 Este projeto implementa uma simulação do movimento de objetos e calcula possíveis pontos de encontro entre eles. Utiliza `matplotlib` para a visualização da movimentação e `tkinter` para a criação de uma interface gráfica interativa.
